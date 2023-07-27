@@ -6,17 +6,17 @@ import string
 def get_inputs():
     parser = argparse.ArgumentParser()
     parser.add_argument("-a", "--amount", default=1, dest="amount",
-                        help="The number of passwords to be generated.")
+                        help="The number of passwords to be generated.",type=int)
     parser.add_argument("-n", "--number", default=1, dest="number",
-                        help="The amount of numbers to be contained in the password.")
+                        help="The amount of numbers to be contained in the password.",type=int)
     parser.add_argument("-u", "--upper-case", default=1, dest="upper_case",
-                        help="The amount of capital letters to include in the password.")
+                        help="The amount of capital letters to include in the password.",type=int)
     parser.add_argument("-l", "--lower-case", default=1, dest="lower_case",
-                        help="The amount of lowercase letters to be included in the password.")
+                        help="The amount of lowercase letters to be included in the password.",type=int)
     parser.add_argument("-s", "--special-char", default=1, dest="special_char",
-                        help="The amount of special characters to be included in the password.")
+                        help="The amount of special characters to be included in the password.",type=int)
     parser.add_argument("-t", "--total-lenght", dest="total",
-                        help="Password length, if used, other parameters are ignored and completely random passwords are generated.")
+                        help="Password length, if used, other parameters are ignored and completely random passwords are generated.",type=int)
     parser.add_argument("-o", "--output-file", default="passwords.txt",
                         dest="passfile", help="The name of the file to save passwords.\nYou have to type the file extension!\nIf you set False, the file will not be written.")
     return parser.parse_args()
@@ -26,10 +26,6 @@ args = get_inputs()
 
 
 def generate_char_list(number, upper_case, lower_case, special_char):
-    number = int(number)
-    upper_case = int(upper_case)
-    lower_case = int(lower_case)
-    special_char = int(special_char)
     char_list = []
     for i in range(number):
         char_list.append(random.choice(string.digits))
@@ -47,7 +43,6 @@ def generate_password(char_list):
     return password
 
 def generate_passwords(amount):
-    amount = int(amount)
     passwords = []
     for i in range(amount):
         if args.total:
@@ -64,11 +59,14 @@ def generate_passwords(amount):
     return passwords
 
 def generate_passwords_file(file_name,passwords):
-    if file_name:
+    if not (file_name == "False"):
         with open(file_name,"w",encoding="utf-8") as f:
             f.write("\n".join(passwords))
-    print(f"[+] Passwords saved in {file_name} file.")
+        print(f"[+] Passwords saved in {file_name} file.")
 
 
 passwords = generate_passwords(args.amount)
+print("[+] Passwords are generated\n")
+for password in passwords:
+    print(f"[+] {password}")
 generate_passwords_file(args.passfile,passwords)
